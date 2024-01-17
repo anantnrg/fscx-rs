@@ -57,10 +57,10 @@ where
                 }
             }
             Err(err) => {
-                return Err(anyhow!(format!(
+                return Err(anyhow!(
                     "ERROR: An error occurred while attempting to copy the file: {}",
                     err
-                )))
+                ))
             }
         }
         println!()
@@ -96,5 +96,21 @@ where
         Ok(remove_file(path)?)
     } else {
         Ok(())
+    }
+}
+
+pub fn read_to_string<P>(path: P) -> Result<String>
+where
+    P: AsRef<Path>,
+{
+    match std::fs::metadata(&path) {
+        Ok(metadata) => {
+            if metadata.is_file() {
+                return Ok(std::fs::read_to_string(path)?);
+            } else {
+                Err(anyhow!("Path is not a file!"))
+            }
+        }
+        Err(e) => Err(anyhow!("File doesn't exist: {}", e)),
     }
 }
