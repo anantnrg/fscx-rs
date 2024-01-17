@@ -3,7 +3,7 @@ use anyhow::anyhow;
 use anyhow::Result;
 use std::fs::remove_file;
 use std::fs::File;
-use std::io::{self, Read, Write};
+use std::io::{Read, Write};
 use std::path::Path;
 
 pub fn copy<S, D, P>(
