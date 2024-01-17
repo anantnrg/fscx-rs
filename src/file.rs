@@ -1,6 +1,7 @@
 use crate::Progress;
 use anyhow::anyhow;
 use anyhow::Result;
+use std::fs::remove_file;
 use std::fs::File;
 use std::io::{self, Read, Write};
 use std::path::Path;
@@ -66,4 +67,34 @@ where
     }
 
     Ok(())
+}
+
+pub fn move_to<S, D, P>(
+    src: S,
+    dest: D,
+    overwrite: bool,
+    progress: Option<P>,
+    buff_size: Option<usize>,
+) -> Result<()>
+where
+    S: AsRef<Path>,
+    D: AsRef<Path>,
+    P: Fn(Progress),
+{
+    copy(&src, dest, overwrite, progress, buff_size)?;
+
+    remove(src)?;
+
+    Ok(())
+}
+
+pub fn remove<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path>,
+{
+    if path.as_ref().exists() {
+        Ok(remove_file(path)?)
+    } else {
+        Ok(())
+    }
 }
