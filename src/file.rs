@@ -114,3 +114,34 @@ where
         Err(e) => Err(anyhow!("File doesn't exist: {}", e)),
     }
 }
+
+pub fn write<P>(path: P, content: &str) -> Result<()>
+where
+    P: AsRef<Path>,
+{
+    match std::fs::metadata(&path) {
+        Ok(metadata) => {
+            if metadata.is_file() {
+                let mut file = std::fs::File::create(path)?;
+                file.write_all(content.as_bytes())?;
+                Ok(())
+            } else {
+                Err(anyhow!("Path is not a file!"))
+            }
+        }
+        Err(e) => Err(anyhow!("File doesn't exist: {}", e)),
+    }
+}
+
+pub fn create<P>(path: P) -> Result<()>
+where
+    P: AsRef<Path>,
+{
+    match std::fs::metadata(&path) {
+        Ok(_) => Err(anyhow!("File exists!")),
+        Err(_) => {
+            std::fs::File::create_new(path)?;
+            Ok(())
+        }
+    }
+}
