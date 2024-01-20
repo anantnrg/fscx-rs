@@ -5,7 +5,7 @@ use walkdir::DirEntry;
 use walkdir::WalkDir;
 
 pub fn filter_paths(paths: Vec<&str>, item: &DirEntry) -> bool {
-    for path in paths.clone() {
+    for &path in &paths {
         if let Some(file_name) = item.path().to_str() {
             if file_name == path || file_name.contains(path) {
                 return true;
