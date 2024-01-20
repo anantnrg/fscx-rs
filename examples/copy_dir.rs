@@ -1,5 +1,7 @@
 use fscx_rs::dir::traverse;
 
 fn main() {
-    traverse();
+    let paths = traverse(vec!["target", ".git", "examples/copy_dir.rs"]);
+
+    println!("{:?}", paths);
 }
