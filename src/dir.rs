@@ -4,11 +4,12 @@ use walkdir::DirEntry;
 use walkdir::WalkDir;
 
 pub fn filter_paths(paths: Vec<&str>, item: &DirEntry) -> bool {
-    for path in &paths {
-        if let Some(file_name) = item.file_name().to_str() {
-            if file_name.starts_with(path) {
+    for path in paths.clone() {
+        if let Some(file_name) = item.path().to_str() {
+            if file_name == path || file_name.contains(path) {
                 return true;
             }
+            // println!("{}", file_name);
         }
     }
     false
