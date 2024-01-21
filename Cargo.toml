@@ -4,7 +4,7 @@ description = "Copy files and directories recursively with progress."
 version = "0.1.1"
 edition = "2021"
 license = "GPL-3.0-or-later"
-keywords = ["filesystem", "fs", "linux", "file", "files", "directory", "dir", "dirs", "folder", "folders", "copy", "paste", "move", "recursive"]
+keywords = ["filesystem", "files", "directory", "copy", "recursive"]
 exclude = ["/tests"]
 
 [dependencies]
