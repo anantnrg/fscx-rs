@@ -1,6 +1,9 @@
+use crate::Progress;
 use anyhow::Result;
 use std::path;
 use std::path::Path;
+use std::path::PathBuf;
+use std::sync::Arc;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
@@ -26,4 +29,40 @@ where
         paths.push(path::PathBuf::from(entry.unwrap().path()))
     }
     Ok(paths)
+}
+
+pub fn copy<S, D, P>(
+    src: S,
+    dest: D,
+    exclude_paths: Vec<&str>,
+    overwrite: bool,
+    progress: Option<P>,
+    buff_size: Option<usize>,
+) -> Result<()>
+where
+    S: AsRef<Path>,
+    D: AsRef<Path>,
+    P: Fn(Progress),
+{
+    let paths = traverse(src.as_ref(), exclude_paths)?;
+
+    for path in paths {
+        let src_path =
+            PathBuf::from(src.as_ref()).join(path.to_str().unwrap().trim_start_matches("./"));
+        let dest_path =
+            PathBuf::from(dest.as_ref()).join(path.to_str().unwrap().trim_start_matches("./"));
+
+        if src_path.is_dir() {
+            std::fs::create_dir_all(dest_path)?;
+        } else {
+            crate::file::copy(
+                src_path,
+                dest_path,
+                overwrite,
+                progress.as_ref().clone(),
+                buff_size,
+            )?;
+        }
+    }
+    Ok(())
 }
