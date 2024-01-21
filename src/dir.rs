@@ -7,10 +7,10 @@ use std::sync::Arc;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
-pub fn filter_paths(paths: Vec<&str>, item: &DirEntry) -> bool {
-    for &path in &paths {
+pub fn filter_paths(paths: Vec<String>, item: &DirEntry) -> bool {
+    for path in paths {
         if let Some(file_name) = item.path().to_str() {
-            if file_name == path || file_name.contains(path) {
+            if file_name == path || file_name.contains(path.clone().as_str()) {
                 return true;
             }
         }
@@ -18,7 +18,7 @@ pub fn filter_paths(paths: Vec<&str>, item: &DirEntry) -> bool {
     false
 }
 
-pub fn traverse<D>(dir: D, exclude_paths: Vec<&str>) -> Result<Vec<path::PathBuf>>
+pub fn traverse<D>(dir: D, exclude_paths: Vec<String>) -> Result<Vec<path::PathBuf>>
 where
     D: AsRef<Path>,
 {
@@ -34,7 +34,7 @@ where
 pub fn copy<S, D, P>(
     src: S,
     dest: D,
-    exclude_paths: Vec<&str>,
+    exclude_paths: Vec<String>,
     overwrite: bool,
     progress: Option<P>,
     buff_size: Option<usize>,
