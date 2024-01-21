@@ -4,16 +4,16 @@ use fscx_rs::Progress;
 
 fn main() {
     let paths = traverse(
-        "./",
+        "/home/mik3y/projects/repos/video-scripts",
         vec!["./examples", "target", ".git", "examples/test.txt"],
     )
     .unwrap();
 
-    copy(
-        "./",
+    let res = copy(
+        "/home/mik3y/Downloads",
         "./tests",
         vec!["target"],
-        false,
+        true,
         Some(|progress: Progress| {
             println!(
                 "\rCopying: {}% ({}/{})",
@@ -21,7 +21,6 @@ fn main() {
             );
         }),
         None,
-    )
-    .unwrap();
-    println!("{:?}", paths);
+    );
+    println!("{:?}", res);
 }

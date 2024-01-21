@@ -46,11 +46,15 @@ where
 {
     let paths = traverse(src.as_ref(), exclude_paths)?;
 
+    let smth = src.as_ref();
+
     for path in paths {
         let src_path =
             PathBuf::from(src.as_ref()).join(path.to_str().unwrap().trim_start_matches("./"));
-        let dest_path =
-            PathBuf::from(dest.as_ref()).join(path.to_str().unwrap().trim_start_matches("./"));
+        let relative_path = path.strip_prefix(src.as_ref()).unwrap();
+        let dest_path = PathBuf::from(dest.as_ref()).join(relative_path);
+
+        println!("src: {src_path:?}\ndest: {dest_path:?}");
 
         if src_path.is_dir() {
             std::fs::create_dir_all(dest_path)?;
