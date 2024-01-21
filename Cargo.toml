@@ -1,7 +1,10 @@
 [package]
 name = "fscx-rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
+license = "GPL-3.0-or-later"
+keywords = ["filesystem", "fs", "linux", "file", "files", "directory", "dir", "dirs", "folder", "folders", "copy", "paste", "move", "recursive"]
+exclude = ["/tests"]
 
 [dependencies]
 anyhow = "1.0.79"
